@@ -1,5 +1,36 @@
 #!/bin/bash          
 
+# Source config reader
+
+. ./bash_ini_parser/read_ini.sh
+read_ini ./config.ini
+
+# Set up the variables
+PORT=${INI__CONNECTION__PORT}
+HOSTIP=${INI__CONNECTION__HOSTIP}
+GUESTIP=${INI__CONNECTION__GUESTIP}
+
+
+MAINSCREEN=${INI__SCREENS__MAINSCREEN}
+SECONDSCREEN=${INI__SCREENS__SECONDSCREEN}
+THIRDSCREEN=${INI__SCREENS__THIRDSCREEN}
+
+
+M500KB= ${INI__USB__M500KB}
+WIREDMOUSE= ${INI__USB__WIREDMOUSE}
+DUALSHOCK= ${INI__USB__DUALSHOCK}
+
+KVMGUESTNAME=${INI__NAMES__KVMGUESTNAME}
+HOSTSYNERGYNAME=${INI__NAMES__HOSTSYNERGYNAME}
+GUESTSYNERGYNAME=${INI__NAMES__GUESTSYNERGYNAME}
+
+KEYTOCHANGE=${INI__KEY__KEYTOCHANGE}
+
+HOSTSYNERGYCONF=${INI__SYNERGYCONF__HOSTSYNERGYCONF}
+
+
+exit
+
 
 ## Functions
 function main_computer {
@@ -34,7 +65,7 @@ function main_computer {
     ## 4. Launching synergy back
 
     echo "Launching synergy"
-    synergy -c $SYNERGYCONF &
+    synergy -c $HOSTSYNERGYCONF &
 
     # exit
 }
@@ -64,7 +95,7 @@ function second_computer {
     sleep 2
 
     ## 3. Launching synergy back
-    synergyc --name $HOSTSYNERGY $GUESTIP &
+    synergyc --name $HOSTSYNERGYNAME $GUESTIP &
     # exit
 }
 
@@ -81,8 +112,9 @@ function test_func2 {
 }
 
 
-
+# Set up initial state to be sure the linux host is the main computer
 mode='main'
+test_func1
 
 ## Main loop. Keep listening to the specified port and if receives the appropriate key, launch the
 ## function to change between main and second computer 
