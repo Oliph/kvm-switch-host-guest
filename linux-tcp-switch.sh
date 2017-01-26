@@ -1,41 +1,5 @@
 #!/bin/bash          
 
-## Variables
-
-# Port to communicate
-PORT=29800
-
-# IP of the guest
-GUESTIP=192.168.1.87
-
-# IP of the host
-HOSTIP=192.168.1.2
-
-# KEY That is received through tcp to check it is the right one
-KEYTOCHANGE='DfxcwRE202dk45'
-
-# Screens to modify
-MAINSCREEN=HDMI1
-SECONDSCREEN=HDMI2
-THIRDSCREEN=VGA1
-
-# Name of the windows guest for kvm
-KVMGUESTNAME=win-10
-
-# Name of host  for synergy
-HOSTSYNERGY=arch
-
-# Name of guest for synergy
-GUESTSYNERGY=win10
-
-# Different usb devices to attach or detach 
-M500KB=./usb_xml/m500.xml
-WIREDMOUSE=./usb_xml/wired_mouse.xml
-DUALSHOCK=./usb_xml/dual_shock.xml
-
-# Synergy config file that has been configured separately
-SYNERGYCONF = "./synergy_conf/linux_synergy_server.conf"
-
 
 ## Functions
 function main_computer {
