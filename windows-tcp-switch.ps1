@@ -13,3 +13,8 @@
 
 
 ## Main loop
+
+while($true)
+{
+
+}
