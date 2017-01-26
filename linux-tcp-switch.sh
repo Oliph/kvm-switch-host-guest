@@ -2,11 +2,14 @@
 
 ## Variables
 
-#Port to communicate
+# Port to communicate
 PORT=29800
 
 # IP of the guest
 GUESTIP=192.168.1.87
+
+# IP of the host
+HOSTIP=192.168.1.2
 
 # KEY That is received through tcp to check it is the right one
 KEYTOCHANGE='DfxcwRE202dk45'
@@ -18,8 +21,12 @@ THIRDSCREEN=VGA1
 
 # Name of the windows guest for kvm
 KVMGUESTNAME=win-10
-# Name of arch name for synergy
-SYNERGYNAME=arch
+
+# Name of host  for synergy
+HOSTSYNERGY=arch
+
+# Name of guest for synergy
+GUESTSYNERGY=win10
 
 # Different usb devices to attach or detach 
 M500KB=./usb_xml/m500.xml
@@ -93,7 +100,7 @@ function second_computer {
     sleep 2
 
     ## 3. Launching synergy back
-    synergyc --name $SYNERGYNAME $GUESTIP &
+    synergyc --name $HOSTSYNERGY $GUESTIP &
     # exit
 }
 
@@ -127,12 +134,11 @@ do
             test_func1
             mode="second"
             
-
         elif [ "$mode" == 'second' ];
         then
             test_func2
             mode="main"
+
         fi
-        echo $mode
     fi
 done
