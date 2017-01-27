@@ -40,7 +40,6 @@ function main_computer {
 
     xrandr --output $MAINSCREEN --auto --primary --output $SECONDSCREEN --auto --left-of $MAINSCREEN --output $THIRDSCREEN --off
 
-    sleep 2
 
     ## 2. Getting the keyboard and the mouse back
 
@@ -53,7 +52,6 @@ function main_computer {
     ## 3. Killing synergy clients
 
     ## Wait a little bit to have time to switch synergy on the host
-    sleep 5
     echo "Killing synergy"
     killall -9 synergys || true
     killall -9 synergyc || true
@@ -64,7 +62,7 @@ function main_computer {
     ## 4. Launching synergy back
 
     echo "Launching synergy"
-    synergy -c $HOSTSYNERGYCONF &
+    /usr/bin/synergy -c $HOSTSYNERGYCONF &
 
     # exit
 }
@@ -76,7 +74,6 @@ function second_computer {
     ## 1. Reset screen
 
     xrandr --output $SECONDSCREEN --primary --output $MAINSCREEN --off --output $THIRDSCREEN --off 
-    sleep 2
 
     ## 2. Getting the keyboard and the mouse back
 
@@ -94,27 +91,15 @@ function second_computer {
     sleep 2
 
     ## 3. Launching synergy back
-    synergyc --name $HOSTSYNERGYNAME $GUESTIP &
+    /usr/bin/synergyc --name $HOSTSYNERGYNAME $GUESTIP &
     # exit
 }
 
-function test_func1 {
-    echo "test_func1"
-    echo $network_signal
-    # exit
-}
-
-function test_func2 {
-    echo "test_func2"
-    echo $network_signal
-    # exit
-}
 
 
 # Set up initial state to be sure the linux host is the main computer
 mode='main'
-test_func1
-
+main_computer
 ## Main loop. Keep listening to the specified port and if receives the appropriate key, launch the
 ## function to change between main and second computer 
 while true; 
@@ -126,12 +111,12 @@ do
     then
         if [ "$mode" == 'main' ]; 
         then
-            test_func1
+            second_computer
             mode="second"
-            
+
         elif [ "$mode" == 'second' ];
         then
-            test_func2
+            main_computer
             mode="main"
 
         fi
