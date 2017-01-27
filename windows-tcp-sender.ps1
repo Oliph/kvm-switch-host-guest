@@ -38,12 +38,14 @@ Function Send-TCPMessage {
     }
 }
 
+
+
 ## Read config file
-Import-Module .\PsIni\PsIni
+Import-Module $PSScriptRoot\PsIni\PsIni
 $CONFIGFILE = '.\config.ini'
-
+ 
 $FILECONTENT = Get-IniContent $CONFIGFILE
-
+$FILECONTENT
 ### Set up variables
 
 $PORT = $FILECONTENT['CONNECTION']['PORT']
