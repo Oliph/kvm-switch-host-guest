@@ -1,5 +1,5 @@
 ﻿# This function is used to send a message throught TCP.
-# All credits to here: http://stackoverflow.com/documentation/powershell/5125/tcp-communication-with-powershell#t=20170126105250343293
+# All credits to: http://stackoverflow.com/documentation/powershell/5125/tcp-communication-with-powershell#t=20170126105250343293
 
 Function Send-TCPMessage { 
     Param ( 
@@ -38,5 +38,17 @@ Function Send-TCPMessage {
     }
 }
 
-Sent-TCPMessage -Port $PORT -ENDPOINT 127.0.0.1 -message $KEYNAME
-Sent-TCPMessage -Port $PORT -ENDPOINT $HOSTIP -message $KEYNAME
+## Read config file
+Import-Module .\PsIni\PsIni
+$CONFIGFILE = '.\config.ini'
+
+$FILECONTENT = Get-IniContent $CONFIGFILE
+
+### Set up variables
+
+$PORT = $FILECONTENT['CONNECTION']['PORT']
+$HOSTIP = $FILECONTENT['CONNECTION']['HOSTIP']
+$KEYNAME = $FILECONTENT['KEY']['KEYTOCHANGE']
+
+Send-TCPMessage -Port $PORT -ENDPOINT 127.0.0.1 -message $KEYNAME
+Send-TCPMessage -Port $PORT -ENDPOINT $HOSTIP -message $KEYNAME
