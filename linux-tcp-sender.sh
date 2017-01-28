@@ -11,6 +11,6 @@ GUESTIP=${INI__CONNECTION__GUESTIP}
 KEYTOCHANGE=${INI__KEY__KEYTOCHANGE}
 
 # Sending the key to the localhost and the guest os with 3 sec of timeout 
-echo -n $KEYTOCHANGE | nc  -w 3 127.0.0.1 $PORT
-echo -n $KEYTOCHANGE | nc  -w 3 $GUESTIP $PORT
+echo -n "'$KEYTOCHANGE'" | nc  -w 3 127.0.0.1 $PORT
+echo -n "'$KEYTOCHANGE'" | nc  -w 3 $GUESTIP $PORT
 exit

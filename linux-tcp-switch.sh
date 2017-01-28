@@ -99,24 +99,28 @@ function second_computer {
 
 # Set up initial state to be sure the linux host is the main computer
 mode='main'
-main_computer
+# main_computer
 ## Main loop. Keep listening to the specified port and if receives the appropriate key, launch the
 ## function to change between main and second computer 
 while true; 
 do
     # Using netcat to listen to the port. Close the connection as soon as getting a message
     # adding the option -k keeps it alive
+
     network_signal=`nc -l $PORT`
-    if [ "$network_signal" == $KEYTOCHANGE ];
+    echo $network_signal
+    if [ $network_signal == "'$KEYTOCHANGE'" ];
     then
         if [ "$mode" == 'main' ]; 
         then
-            second_computer
+            # second_computer
+            echo "Swith to second"
             mode="second"
 
         elif [ "$mode" == 'second' ];
         then
-            main_computer
+            # main_computer
+            echo "Switch to main"
             mode="main"
 
         fi
