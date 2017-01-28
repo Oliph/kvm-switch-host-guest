@@ -65,7 +65,7 @@ Function Main-Computer {
         Stop-Process -processname synergys -ErrorAction SilentlyContinue
 
         ## Pause a little bit for leaving it the time to terminate synergy properly
-        Start-Sleep 5
+        Start-Sleep 2
         ## Launch Synergy server
         
         Start-Process -FilePath "C:\Program Files\Synergy\synergys.exe" -ArgumentList "-f --debug ERROR --name $GUESTSYNERGYNAME  --log c:\windows\synergy.log -c $GUESTSYNERGYCONF --address $GUESTIP" -WindowStyle Minimized
@@ -82,14 +82,14 @@ Function Second-Computer {
 
         # Pause 10 second before killing the synergy server to have time to switch on the linux screen and launch the synergy server there
         ## No Need it is the time needed for the main screen to reactivate
-        Start-Sleep 10
+        Start-Sleep 2
 
         ## Kill the synergy server process 
         Stop-Process -processname synergys -ErrorAction SilentlyContinue
         ## Pause a little bit for leaving it the time to terminate synergy properly
-        Start-Sleep 5
+        Start-Sleep 2
         ## Launch the Synergy client
-        Start-Process -FilePath "C:\Program Files\Synergy\synergyc.exe"  -ArgumentList "$HOSTIP" -WindowStyle Minimized
+        Start-Process -FilePath "C:\Program Files\Synergy\synergyc.exe"  -ArgumentList $HOSTIP -WindowStyle Minimized
     }
 }
 
@@ -103,25 +103,33 @@ $FILECONTENT
 
 $PORT = $FILECONTENT['CONNECTION']['PORT']
 $HOSTIP = $FILECONTENT['CONNECTION']['HOSTIP']
+$GUESTIP = $FILECONTENT['CONNECTION']['GUESTIP']
 $KEYNAME = $FILECONTENT['KEY']['KEYTOCHANGE']
+$GUESTSYNERGYNAME = $FILECONTENT['NAMES']['GUESTSYNERGYNAME']
+$GUESTSYNERGYCONF = $FILECONTENT['SYNERGYCONF']['GUESTSYNERGYCONF']
 
 ## Set up initial state to be sure the guest is the second computer
 $mode = 'second'
-
+Second-Computer $HOSTIP
 ## Main loop
 
-#while($true)
-#{
+while($true)
+{
    $network_signal = Receive-TCPMessage $PORT
    if ($network_signal -match $KEYNAME) {
         if ($mode -match 'second') {
             echo "Received the key and was on $mode"
+            echo $GUESTSYNERGYNAME 
+            echo $GUESTIP 
+            echo $GUESTSYNERGYCONF
             Main-Computer $GUESTSYNERGYNAME $GUESTIP $GUESTSYNERGYCONF
             $mode = 'main'
         }
         elseif ($mode -match 'main') {
             echo "Received the key and was on $mode"
+            ECHO $HOSTIP
             Second-Computer $HOSTIP
             $mode = 'second'
         }
         }
+}
