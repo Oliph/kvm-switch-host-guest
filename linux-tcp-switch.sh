@@ -108,19 +108,21 @@ do
     # adding the option -k keeps it alive
 
     network_signal=`nc -l $PORT`
-    echo $network_signal
+    network_signal=$network_signal | sed $'s/\r//'
+    network_signal=$network_signal | sed $'s/\'//'
+    echo $"$network_signal"
     if [ $network_signal == "'$KEYTOCHANGE'" ];
     then
         if [ "$mode" == 'main' ]; 
         then
-            # second_computer
             echo "Swith to second"
+            # second_computer
             mode="second"
 
         elif [ "$mode" == 'second' ];
         then
-            # main_computer
             echo "Switch to main"
+            # main_computer
             mode="main"
 
         fi
