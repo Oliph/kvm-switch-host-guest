@@ -13,8 +13,8 @@ echo $GUESTIP
 echo $PORT
 
 # Sending the key to the localhost and the guest os with 3 sec of timeout 
-while true;
-do
+# while true;
+# do
 echo -n "$KEYTOCHANGE" | nc  -w 3 127.0.0.1 $PORT
 echo -n "$KEYTOCHANGE" | nc -w 2 192.168.1.87 $PORT
-done
+# done

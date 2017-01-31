@@ -84,9 +84,9 @@ function second_computer {
 
     ## 2. Killing synergy clients
 
-    killall -9 synergys  || true
-    killall -9 synergyc  || true 
-    killall -9 synergy  || true
+    killall -5 synergys  || true
+    killall -5 synergyc  || true 
+    killall -5 synergy  || true
     # Wait 2 sec before launching synergy
     sleep 2
 
@@ -99,30 +99,29 @@ function second_computer {
 
 # Set up initial state to be sure the linux host is the main computer
 mode='main'
-# main_computer
+main_computer
 ## Main loop. Keep listening to the specified port and if receives the appropriate key, launch the
 ## function to change between main and second computer 
 while true; 
 do
     # Using netcat to listen to the port. Close the connection as soon as getting a message
     # adding the option -k keeps it alive
-
     network_signal=`nc -l $PORT`
-    network_signal=$network_signal | sed $'s/\r//'
-    network_signal=$network_signal | sed $'s/\'//'
-    echo $"$network_signal"
-    if [ $network_signal == "'$KEYTOCHANGE'" ];
+    # Remove the return carriage from windows message that is appended automatically
+    network_signal=$(echo "$network_signal" | sed 's/\r//')
+
+    if [ "${network_signal}" == $KEYTOCHANGE ];
     then
         if [ "$mode" == 'main' ]; 
         then
             echo "Swith to second"
-            # second_computer
+            second_computer
             mode="second"
 
         elif [ "$mode" == 'second' ];
         then
             echo "Switch to main"
-            # main_computer
+            main_computer
             mode="main"
 
         fi
