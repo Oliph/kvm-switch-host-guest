@@ -105,6 +105,10 @@ $PORT = $FILECONTENT['CONNECTION']['PORT']
 $HOSTIP = $FILECONTENT['CONNECTION']['HOSTIP']
 $GUESTIP = $FILECONTENT['CONNECTION']['GUESTIP']
 $KEYNAME = $FILECONTENT['KEY']['KEYTOCHANGE']
+## Removing the ' that are added to the string 
+$KEYNAME = $KEYNAME.Substring(1, $KEYNAME.Length-2)
+echo $KEYNAME
+
 $GUESTSYNERGYNAME = $FILECONTENT['NAMES']['GUESTSYNERGYNAME']
 $GUESTSYNERGYCONF = $FILECONTENT['SYNERGYCONF']['GUESTSYNERGYCONF']
 
@@ -116,6 +120,7 @@ Second-Computer $HOSTIP
 while($true)
 {
    $network_signal = Receive-TCPMessage $PORT
+   echo $network_signal
    if ($network_signal -match $KEYNAME) {
         if ($mode -match 'second') {
             echo "Received the key and was on $mode"
@@ -127,7 +132,7 @@ while($true)
         }
         elseif ($mode -match 'main') {
             echo "Received the key and was on $mode"
-            ECHO $HOSTIP
+            echo $HOSTIP
             Second-Computer $HOSTIP
             $mode = 'second'
         }

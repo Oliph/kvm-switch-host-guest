@@ -39,7 +39,6 @@ Function Send-TCPMessage {
 }
 
 
-
 ## Read config file
 Import-Module $PSScriptRoot\PsIni\PsIni
 $CONFIGFILE = '.\config.ini'
@@ -52,5 +51,9 @@ $PORT = $FILECONTENT['CONNECTION']['PORT']
 $HOSTIP = $FILECONTENT['CONNECTION']['HOSTIP']
 $KEYNAME = $FILECONTENT['KEY']['KEYTOCHANGE']
 
+## Removing the ' that are added to the string 
+echo $KEYNAME
+$TRIMKEYNAME = $KEYNAME.Substring(1, $KEYNAME.Length-2)
+
 Send-TCPMessage -Port $PORT -ENDPOINT 127.0.0.1 -message $KEYNAME
-Send-TCPMessage -Port $PORT -ENDPOINT $HOSTIP -message $KEYNAME
+Send-TCPMessage -Port $PORT -ENDPOINT $HOSTIP -message $TRIMKEYNAME
